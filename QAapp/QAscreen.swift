@@ -161,9 +161,10 @@ class QAscreen: UIViewController {
     //    let questions: [String] = ["Pakistan", "England", "France", "Canada", "China", "Germany", "USA", "UAE", "Russia", "Australia"]
     var recordedData: String = ""
     var recordedAnswer: [String] = []
+    
     var correctAnsList: [String] = []
     var wrongAnsList: [String] = []
-    var correctIncorrectList: [[String]] = [[]]
+    var correctIncorrectList: [String] = []
     
     var answers = [String]()
 //    let answers = ["Islamabad", "London", "Paris", "Ottawa", "Beijing", "Berlin", "Washington", "Abu Dhabi", "Moscow", "Canberra"]
@@ -196,14 +197,23 @@ class QAscreen: UIViewController {
         
         self.questionTitleLabel.text = data.singleton.apiResponseQuestion[0]
         
-        data.singleton.apiResponseQuestion.removeFirst()
-        data.singleton.apiResponseAnswer.removeFirst()
+        var apiResponseQuestion = data.singleton.apiResponseQuestion
+        var apiResponseAnswer = data.singleton.apiResponseAnswer
+        
+        apiResponseQuestion.removeFirst()
+        apiResponseAnswer.removeFirst()
         
         print("QUESTION: \(data.singleton.apiResponseQuestion)")
         print("ANSWER: \(data.singleton.apiResponseAnswer)")
         
-        self.questions = data.singleton.apiResponseQuestion
-        self.answers = data.singleton.apiResponseAnswer
+//        self.questions = data.singleton.apiResponseQuestion
+//        self.answers = data.singleton.apiResponseAnswer
+        
+        print("QUESTION: \(apiResponseQuestion)")
+        print("ANSWER: \(apiResponseAnswer)")
+        
+        self.questions = apiResponseQuestion
+        self.answers = apiResponseAnswer
         
         questionLabel.text = "\(questions[count])"
         countLabel.text = "\(count+1)/\(questions.count)"
@@ -211,7 +221,6 @@ class QAscreen: UIViewController {
         data.singleton.questions = questions
         
         self.setupViews()
-        
         
         //// ============= custom code ==============
         
@@ -265,15 +274,20 @@ class QAscreen: UIViewController {
     }
     
     func calculatingResults() {
-        for index in 0..<answers.count {
+        
+        for i in 0..<answers.count {
             
-            if answers[index] == recordedAnswer[index]{
-                correctAnsList.append(answers[index])
-                correctIncorrectList.append(["Correct"])
+            if answers[i] == recordedAnswer[i]{
+                
+                print("answer matches: \(recordedAnswer[i])")
+                
+                correctAnsList.append(answers[i])
+                correctIncorrectList.append("Correct")
                 correctAnswers = correctAnswers + 1
             }else{
-                wrongAnsList.append(recordedAnswer[index])
-                correctIncorrectList.append([recordedAnswer[index] + " - " + " Correct: " + answers[index]])
+                wrongAnsList.append(recordedAnswer[i])
+                correctIncorrectList.append(recordedAnswer[i])
+//                correctIncorrectList.append([recordedAnswer[index] + " - " + " Correct: " + answers[index]])
             }
             
         }

@@ -13,11 +13,33 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
 
     //// UI OBJECTS
     
+    let backgroundImage: UIImageView = {
+        let imageview = UIImageView()
+        imageview.image = UIImage(named: "background.png")
+        imageview.contentMode = .scaleAspectFit
+        imageview.translatesAutoresizingMaskIntoConstraints = false
+        return imageview
+    }()
+    
+    let titleLable: UILabel = {
+        let label = UILabel()
+        label.text = "Scan Quiz Paper"
+        label.textAlignment = .center
+        label.font = UIFont(name: "Roboto-Medium", size: 23)
+        //        label.font = UIFont.systemFont(ofSize: 23)
+        label.textColor = .white
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     let camButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("OPEN CAMERA", for: .normal)
-        button.setTitleColor(UIColor.white, for: UIControl.State.normal)
-        button.backgroundColor = .red
+//        button.setTitle("OPEN CAMERA", for: .normal)
+//        button.setTitleColor(UIColor.white, for: UIControl.State.normal)
+        button.setImage(UIImage(named: "camera.png"), for: .normal)
+        button.tintColor = .white
+//        button.imageView?.tintColor = .white
+//        button.backgroundColor = .blue
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(camButtonHandler), for: .touchUpInside)
         return button
@@ -26,9 +48,8 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
     //// VARIABLES
     
     var imagePicker: UIImagePickerController!
-    let capturedImage = UIImageView()
     var imageupload: UIImage?
-    
+    var sv = UIView()
     
     // MARK:- S3 BUCKET INFORMATION
     //constants
@@ -36,6 +57,7 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
     let S3BucketName: String = "quizexam"
     var S3UploadKeyName: String = ".png"
     let baseURL = "https://s3.us-east-2.amazonaws.com/quizexam/"
+    var uploadedImageurl = String()
     
     //S3 Inits
     var completionHandler: AWSS3TransferUtilityUploadCompletionHandlerBlock?
@@ -74,8 +96,6 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
         
         self.completionHandler = { (task, error) -> Void in
             
-            
-            
             DispatchQueue.main.async(execute: {
                 if let error = error {
                     print("Failed with error: \(error)")
@@ -83,9 +103,11 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
                 }
                     
                 else{
-//                    UIViewController.removeSpinner(spinner: sv)
 //                    self.displayMyAlertMessage(userMessage: "success")
                     print("Success")
+                    UIViewController.removeSpinner(spinner: self.sv)
+                    self.gettingDataFromApi(imageurl: self.uploadedImageurl)
+//                    ToastView.shared.short(self.view, txt_msg: "Image Uploaded Successfull")
                 }
             })
         }
@@ -121,10 +143,29 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
         return newImage!
     }
     
+    private func gettingDataFromApi(imageurl: String){
+        
+//        let imageurl = "https://s3.us-east-2.amazonaws.com/quizexam/Image_588691588.181878.png"
+        
+        let sv = UIViewController.displaySpinner(onView: self.view)
+        
+        AuthServices.instance.updateImageURLtoDatabase(imageURL: imageurl) { (success) in
+            if(success){
+                print("api successfull")
+                UIViewController.removeSpinner(spinner: sv)
+                self.navigationController?.pushViewController(QAscreen(), animated: true)
+            }else{
+                print("not successfull")
+                UIViewController.removeSpinner(spinner: sv)
+            }
+        }
+        
+    }
+    
     // MARK:- Upload Image function
     
     func uploadImage(with data: Data) {
-//        let sv = UIViewController.displaySpinner(onView: self.view)
+        
         let expression = AWSS3TransferUtilityUploadExpression()
         
         transferUtility.uploadData(
@@ -148,7 +189,6 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
                         print("Generating Upload File")
                         print("Upload Starting!")
                         print("Uploading Successful!")
-//                        UIViewController.removeSpinner(spinner: sv)
                     }
                     
                     // Do something with uploadTask.
@@ -162,36 +202,72 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
     // MARK:- PRIVATE FUNCTIONS
     fileprivate func setupViews() {
         
+        view.addSubview(backgroundImage)
+        view.addSubview(titleLable)
         view.addSubview(camButton)
         
-        view.addSubview(capturedImage)
+        backgroundImage.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        backgroundImage.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        backgroundImage.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        backgroundImage.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+    
+        
+        titleLable.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        let centerY = NSLayoutConstraint(item: titleLable, attribute: .centerY, relatedBy: .equal, toItem: view, attribute: .centerY, multiplier: 0.5, constant: 0)
+        
+        NSLayoutConstraint.activate([centerY])
         
         camButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         camButton.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-        camButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.8).isActive = true
-        camButton.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.1).isActive = true
-        
-        capturedImage.backgroundColor = .red
-        capturedImage.translatesAutoresizingMaskIntoConstraints = false
-        capturedImage.topAnchor.constraint(equalTo: camButton.bottomAnchor, constant: 10).isActive = true
-        capturedImage.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -10).isActive = true
-        capturedImage.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10).isActive = true
-        capturedImage.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -10).isActive = true
+        camButton.widthAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.15).isActive = true
+        camButton.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.15).isActive = true
         
         
     }
     
     //// OBJECTIVE C FUNCTIONS
     // MARK:- OBJECTIVE C FUNCTIONS
-    @objc func camButtonHandler(){
-        print("open camera")
+    
+    func openCamera(){
+        
         imagePicker =  UIImagePickerController()
         imagePicker.delegate = self
+        imagePicker.allowsEditing = true
         imagePicker.sourceType = .camera
+        present(imagePicker, animated: true, completion: nil)
+
+    }
+    
+    func openGallery(){
         
+        imagePicker =  UIImagePickerController()
+        imagePicker.delegate = self
+        imagePicker.allowsEditing = true
+        imagePicker.sourceType = .photoLibrary
         present(imagePicker, animated: true, completion: nil)
         
-//        navigationController?.pushViewController(SecondViewController(), animated: true)
+    }
+    
+    @objc func camButtonHandler(){
+        print("open camera")
+//        imagePicker =  UIImagePickerController()
+//        imagePicker.delegate = self
+//        imagePicker.allowsEditing = true
+//        imagePicker.sourceType = .camera
+//        present(imagePicker, animated: true, completion: nil)
+        
+        let alert = UIAlertController(title: "Choose Image", message: nil, preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: "Camera", style: .default, handler: { _ in
+            self.openCamera()
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Gallery", style: .default, handler: { _ in
+            self.openGallery()
+        }))
+        
+        alert.addAction(UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil))
+        
+        self.present(alert, animated: true, completion: nil)
         
     }
     
@@ -199,9 +275,14 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
     // MARK:- IMAGEPICKER DELEGATE FUNCTIONS
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
+        if let editedImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
+            self.imageupload = editedImage
+        } else if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            self.imageupload = image
+        }
         
-        capturedImage.image = info[.originalImage] as? UIImage
-        imageupload = capturedImage.image
+//        capturedImage.image = info[.originalImage] as? UIImage
+//        imageupload = capturedImage.image
         
         let currentDateTime = Date()
         let stringTime = "Image_\(currentDateTime.timeIntervalSinceReferenceDate)"
@@ -210,17 +291,19 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
             
             S3UploadKeyName = stringTime.appending(".png")
             
-            let imageurl = baseURL+self.S3UploadKeyName
-            self.uploadImage(with: self.resizeImage(image: self.imageupload!, targetSize: CGSize(width: 400, height: 400)).pngData()!)
+            self.uploadedImageurl = baseURL+self.S3UploadKeyName
             
-            print("imageURL: \(imageurl)")
+            self.uploadImage(with: self.imageupload!.pngData()!)
+            print("imageURL: \(uploadedImageurl)")
             
         }else{
             print("error here")
         }
         
         imagePicker.dismiss(animated: true, completion: nil)
-        navigationController?.pushViewController(QAscreen(), animated: true)
+//        navigationController?.pushViewController(QAscreen(), animated: true)
+        
+        self.sv = UIViewController.displaySpinner(onView: self.view)
 
     }
     

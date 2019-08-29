@@ -68,6 +68,8 @@ class SecondViewController: UIViewController {
         
         let imageurl = "https://i.ibb.co/t8NjJCY/11.jpg"
         
+//        let imageurl = "https://s3.us-east-2.amazonaws.com/quizexam/Image_588691588.181878.png"
+        
         let sv = UIViewController.displaySpinner(onView: self.view)
         
         AuthServices.instance.updateImageURLtoDatabase(imageURL: imageurl) { (success) in

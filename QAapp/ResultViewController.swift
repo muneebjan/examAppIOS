@@ -85,6 +85,8 @@ class ResultViewController: UIViewController {
     
     @objc func retryButtonHandler(){
         print("retry Pressed")
+//        let preferences = UserDefaults.standard
+//        preferences.set(true, forKey: "retryCheck")
         self.present(QAscreen(), animated: true, completion: nil)
     }
     
@@ -111,22 +113,17 @@ class ResultViewController: UIViewController {
         print("Total no. of correct answers: \(data.singleton.totalCorrect)")
         print("Wrong answers array: \(data.singleton.wrongAnswers)")
         print("correct Incorrect Array: \(data.singleton.correctIncorrectAnswers)")
-        data.singleton.correctIncorrectAnswers.remove(at: 0)
-        print("correct Incorrect Array: \(data.singleton.correctIncorrectAnswers)")
-        /*
-         
-         var Data = [dataModel(headername: "Islamabad", subType: ["Correct"], isexpandable: false),
-         dataModel(headername: "Lahore", subType: ["incorrect"], isexpandable: false),
-         dataModel(headername: "Peshawar", subType: ["Correct"], isexpandable: false),
-         dataModel(headername: "Gujrat", subType: ["Correct"], isexpandable: false)]
-
-        */
         
-        for index in 0..<data.singleton.questions.count {
-            
-            data.singleton.tableData.append(dataModel(headername: data.singleton.questions[index], subType: data.singleton.correctIncorrectAnswers[index], isexpandable: false))
-            
-        }
+        
+//        data.singleton.correctIncorrectAnswers.remove(at: 0)
+//        print("correct Incorrect Array: \(data.singleton.correctIncorrectAnswers)")
+
+        
+//        for index in 0..<data.singleton.questions.count {
+//            
+//            data.singleton.tableData.append(dataModel(headername: data.singleton.questions[index], subType: data.singleton.correctIncorrectAnswers[index], isexpandable: false))
+//            
+//        }
         
         
         if let count = data.singleton.totalCorrect{

@@ -16,7 +16,7 @@ class data {
     var totalCorrect: Int?
     var wrongAnswers = [String]()
     var questions = [String]()
-    var correctIncorrectAnswers = [[String]]()
+    var correctIncorrectAnswers = [String]()
     
     
     var apiResponseAnswer = [String]()
