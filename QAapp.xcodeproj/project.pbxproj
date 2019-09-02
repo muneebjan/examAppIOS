@@ -31,6 +31,8 @@
 		18B8E75322D345420064799F /* stencil-bt.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 18B8E75222D345420064799F /* stencil-bt.ttf */; };
 		18B8E75522D347D10064799F /* stencil.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 18B8E75422D347D10064799F /* stencil.ttf */; };
 		18C1286222DC916C00977482 /* FinalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C1286122DC916C00977482 /* FinalViewController.swift */; };
+		18DCD7082319A3FE00C66B51 /* ScanImageAndShowQA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DCD7072319A3FE00C66B51 /* ScanImageAndShowQA.swift */; };
+		18DCD70A2319AE8800C66B51 /* EditingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DCD7092319AE8800C66B51 /* EditingViewController.swift */; };
 		62D661C13639107C0E9FFFDA /* Pods_QAapp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE71784D8763A5F507D1AB21 /* Pods_QAapp.framework */; };
 		FAD3A2C722D717C600C551B4 /* ResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD3A2C622D717C600C551B4 /* ResultViewController.swift */; };
 /* End PBXBuildFile section */
@@ -62,6 +64,8 @@
 		18B8E75222D345420064799F /* stencil-bt.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "stencil-bt.ttf"; sourceTree = "<group>"; };
 		18B8E75422D347D10064799F /* stencil.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = stencil.ttf; sourceTree = "<group>"; };
 		18C1286122DC916C00977482 /* FinalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinalViewController.swift; sourceTree = "<group>"; };
+		18DCD7072319A3FE00C66B51 /* ScanImageAndShowQA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanImageAndShowQA.swift; sourceTree = "<group>"; };
+		18DCD7092319AE8800C66B51 /* EditingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditingViewController.swift; sourceTree = "<group>"; };
 		64B9D13B1C67C5E5976F5203 /* Pods-QAapp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QAapp.release.xcconfig"; path = "Target Support Files/Pods-QAapp/Pods-QAapp.release.xcconfig"; sourceTree = "<group>"; };
 		8659CF7269AB7B668D1DE58A /* Pods-QAapp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QAapp.debug.xcconfig"; path = "Target Support Files/Pods-QAapp/Pods-QAapp.debug.xcconfig"; sourceTree = "<group>"; };
 		DE71784D8763A5F507D1AB21 /* Pods_QAapp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QAapp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -120,6 +124,8 @@
 				184F816F22CF231900593D97 /* AppDelegate.swift */,
 				184F817122CF231900593D97 /* ViewController.swift */,
 				184F818122CF2C5F00593D97 /* SecondViewController.swift */,
+				18DCD7072319A3FE00C66B51 /* ScanImageAndShowQA.swift */,
+				18DCD7092319AE8800C66B51 /* EditingViewController.swift */,
 				184F818322CF375600593D97 /* QAscreen.swift */,
 				FAD3A2C622D717C600C551B4 /* ResultViewController.swift */,
 				18C1286122DC916C00977482 /* FinalViewController.swift */,
@@ -296,11 +302,13 @@
 				18B8E75122D340DF0064799F /* Resources.swift in Sources */,
 				186E4D232314223E00D531D2 /* Constants.swift in Sources */,
 				18AA611322DDCB2D004C2385 /* DataModel.swift in Sources */,
+				18DCD70A2319AE8800C66B51 /* EditingViewController.swift in Sources */,
 				18AA611122DDC086004C2385 /* headerView.swift in Sources */,
 				18C1286222DC916C00977482 /* FinalViewController.swift in Sources */,
 				1890CAB42317A174000CE670 /* EndingViewController.swift in Sources */,
 				182764F622D48BD90058D24B /* ToastView.swift in Sources */,
 				184F818422CF375600593D97 /* QAscreen.swift in Sources */,
+				18DCD7082319A3FE00C66B51 /* ScanImageAndShowQA.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

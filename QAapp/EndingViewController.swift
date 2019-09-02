@@ -34,8 +34,10 @@ class EndingViewController: UIViewController {
     
     let answerLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "Roboto-Bold", size: 18)
+//        label.font = UIFont(name: "Roboto-Bold", size: 18)
         label.textAlignment = .center
+        label.numberOfLines = 0
+//        label.text = "Dummy text Dummy text Dummy text Dummy text Dummy text Dummy text Dummy text Dummy text Dummy text"
         label.textColor = .red
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -63,9 +65,9 @@ class EndingViewController: UIViewController {
     
     let correctLabel: UILabel = {
         let label = UILabel()
-//        label.text = "Correct"
         label.backgroundColor = customColor.singleton.greenColor
-        label.font = UIFont(name: "Roboto-Bold", size: 16)
+        label.font = UIFont.systemFont(ofSize: 14)
+        label.numberOfLines = 0
         label.textAlignment = .center
         label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -108,8 +110,10 @@ class EndingViewController: UIViewController {
         containerView.widthAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.4).isActive = true
         containerView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.3).isActive = true
         
-        answerLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
-        answerLabel.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
+        answerLabel.topAnchor.constraint(equalTo: topContainerView.bottomAnchor, constant: 10).isActive = true
+        answerLabel.heightAnchor.constraint(equalTo: containerView.heightAnchor, multiplier: 0.35).isActive = true
+        answerLabel.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 5).isActive = true
+        answerLabel.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: -5).isActive = true
         
         topContainerView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: -40).isActive = true
         topContainerView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
@@ -121,10 +125,11 @@ class EndingViewController: UIViewController {
         circleImage.widthAnchor.constraint(equalToConstant: 70).isActive = true
         circleImage.heightAnchor.constraint(equalToConstant: 70).isActive = true
         
+//        correctLabel.text = "Dummy text Dummy text Dummy text Dummy text Dummy text Dummy text Dummy text Dummy text Dummy text "
         correctLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor).isActive = true
         correctLabel.leftAnchor.constraint(equalTo: containerView.leftAnchor).isActive = true
         correctLabel.rightAnchor.constraint(equalTo: containerView.rightAnchor).isActive = true
-        correctLabel.heightAnchor.constraint(equalTo: containerView.heightAnchor, multiplier: 0.25).isActive = true
+        correctLabel.heightAnchor.constraint(equalTo: containerView.heightAnchor, multiplier: 0.3).isActive = true
         
     }
     

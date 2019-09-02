@@ -31,17 +31,19 @@ class AuthServices {
                 json = try JSON(data: data1)
                 
                 
-                let array1 = json["Answers"].arrayObject!
-                let array2 = json["Questions"].arrayObject!
+                let array1 = json["Answers"].arrayObject! as! [String]
+                let array2 = json["Questions"].arrayObject! as! [String]
                 
                 var answerArray = [String]()
                 var questionArray = [String]()
                 
                 for data in array1{
-                    answerArray.append("\(data)")
+//                    answerArray.append("\(data)")
+                    answerArray.append(data.trim())
                 }
                 for data in array2{
-                    questionArray.append("\(data)")
+//                    questionArray.append("\(data)")
+                    questionArray.append(data.trim())
                 }
                 
 //                let obj = data()

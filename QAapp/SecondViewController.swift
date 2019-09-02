@@ -76,7 +76,7 @@ class SecondViewController: UIViewController {
             if(success){
                 print("api successfull")
                 UIViewController.removeSpinner(spinner: sv)
-                self.navigationController?.pushViewController(QAscreen(), animated: true)
+                self.navigationController?.pushViewController(ScanImageAndShowQA(), animated: true)
             }else{
                 print("not successfull")
                 UIViewController.removeSpinner(spinner: sv)

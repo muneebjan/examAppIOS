@@ -153,7 +153,7 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
             if(success){
                 print("api successfull")
                 UIViewController.removeSpinner(spinner: sv)
-                self.navigationController?.pushViewController(QAscreen(), animated: true)
+                self.navigationController?.pushViewController(ScanImageAndShowQA(), animated: true)
             }else{
                 print("not successfull")
                 UIViewController.removeSpinner(spinner: sv)
@@ -390,5 +390,13 @@ extension UIViewController {
         DispatchQueue.main.async {
             spinner.removeFromSuperview()
         }
+    }
+}
+
+extension String
+{
+    func trim() -> String
+    {
+        return self.trimmingCharacters(in: CharacterSet.whitespaces)
     }
 }

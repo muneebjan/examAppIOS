@@ -72,6 +72,19 @@ class FinalViewController: UIViewController {
         return button
     }()
     
+    let exitButton: UIButton = {
+        let button = UIButton()
+        button.layer.cornerRadius = 10
+        button.setTitle("Exit to Main Menu", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = customColor.singleton.greenColor
+        button.addTarget(self, action: #selector(exitButtonHandler), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    
+    var completeArray = [String]()
     
 //    let questions: [String] = ["Pakistan", "England", "France", "Canada", "China", "Germany", "USA", "UAE", "Russia", "Australia"]
 //    let answers = ["Islamabad", "London", "Correct", "Ottawa", "Beijing", "Berlin", "Correct", "Abu Dhabi", "Moscow", "Canberra"]
@@ -89,9 +102,37 @@ class FinalViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        answerTableView.tableFooterView = UIView()
+
+        completeArray = data.singleton.correctIncorrectAnswers
+        
         setupView()
+        
+        findCorrect()
+        
+        
     }
+    
+    
+    func findCorrect(){
+        
+        var indexCount = [Int]()
+        
+        for index in 0..<completeArray.count{
+            if(completeArray[index] == "Correct"){
+                print(index)
+                indexCount.append(index)
+            }
+        }
+        
+        for value in indexCount.enumerated(){
+            
+            completeArray.remove(at: value.element)
+            completeArray.insert(data.singleton.correctAnswers[value.offset], at: value.element)
+            
+        }
+        
+    }
+    
     
     func setupView(){
         
@@ -110,14 +151,19 @@ class FinalViewController: UIViewController {
         answerTableView.topAnchor.constraint(equalTo: answerLabel.bottomAnchor, constant: 25).isActive = true
         answerTableView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10).isActive = true
         answerTableView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -10).isActive = true
-        answerTableView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.7).isActive = true
+        answerTableView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.6).isActive = true
         
         view.addSubview(retryButton)
-        retryButton.topAnchor.constraint(equalTo: answerTableView.bottomAnchor, constant: 5).isActive = true
-        retryButton.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        retryButton.topAnchor.constraint(equalTo: answerTableView.bottomAnchor, constant: 10).isActive = true
+        retryButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         retryButton.leftAnchor.constraint(equalTo: answerTableView.leftAnchor).isActive = true
         retryButton.rightAnchor.constraint(equalTo: answerTableView.rightAnchor).isActive = true
         
+        view.addSubview(exitButton)
+        exitButton.topAnchor.constraint(equalTo: retryButton.bottomAnchor, constant: 10).isActive = true
+        exitButton.leftAnchor.constraint(equalTo: retryButton.leftAnchor).isActive = true
+        exitButton.rightAnchor.constraint(equalTo: retryButton.rightAnchor).isActive = true
+        exitButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
         
     }
@@ -125,9 +171,21 @@ class FinalViewController: UIViewController {
     //// OBJECTIVE C FUNCTIONS
     
     @objc func retryButtonHandler(){
+        
         print("retry Pressed")
-        self.present(QAscreen(), animated: true, completion: nil)
+        
+        data.singleton.correctIncorrectAnswers.removeAll()
+        data.singleton.questionAnswerMergeArray.removeAll()
+        self.show(QAscreen(), sender: self)
+
     }
+    
+    @objc func exitButtonHandler(){
+        data.singleton.correctIncorrectAnswers.removeAll()
+        data.singleton.questionAnswerMergeArray.removeAll()
+        self.show(ScanImageAndShowQA(), sender: self)
+    }
+    
     
 }
 
@@ -175,12 +233,17 @@ extension FinalViewController: UITableViewDelegate, UITableViewDataSource{
             controller.correctLabel.backgroundColor = customColor.singleton.crossColor
         }else{
             controller.image = UIImage(named: "correct_big")!
-            controller.answerLabel.text = "Your Answer is: \(data.singleton.correctIncorrectAnswers[indexPath.row])"
+            controller.answerLabel.text = "Your Answer is: \(completeArray[indexPath.row])"
             controller.correctLabel.text = "Correct Answer"
             controller.correctLabel.backgroundColor = customColor.singleton.greenColor
         }
         
-        self.navigationController?.pushViewController(controller, animated: true)
+        print(" here  ")
+        
+        DispatchQueue.main.async{
+            self.navigationController?.pushViewController(controller, animated: true)
+        }
+        
     }
     
 }

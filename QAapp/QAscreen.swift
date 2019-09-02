@@ -153,12 +153,15 @@ class QAscreen: UIViewController {
     
     
     var count: Int = 0
+    
+    var count1: Int = 1
+    
     var correctAnswers: Int = 0
     
     var checkStartStop = false
     
     var questions = [String]()
-    //    let questions: [String] = ["Pakistan", "England", "France", "Canada", "China", "Germany", "USA", "UAE", "Russia", "Australia"]
+//    var questions: [String] = ["Countries","Pakistan", "England", "France", "Canada", "China", "Germany", "USA", "UAE", "Russia", "Australia"]
     var recordedData: String = ""
     var recordedAnswer: [String] = []
     
@@ -167,7 +170,7 @@ class QAscreen: UIViewController {
     var correctIncorrectList: [String] = []
     
     var answers = [String]()
-//    let answers = ["Islamabad", "London", "Paris", "Ottawa", "Beijing", "Berlin", "Washington", "Abu Dhabi", "Moscow", "Canberra"]
+//    var answers = ["Capitals","Islamabad", "London", "Paris", "Ottawa", "Beijing", "Berlin", "Washington", "Abu Dhabi", "Moscow", "Canberra"]
 
     
     
@@ -194,6 +197,16 @@ class QAscreen: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
+        
+        // this code is for test
+//        data.singleton.apiResponseQuestion = self.questions
+//        data.singleton.apiResponseAnswer = self.answers
+        // ends here
+        
+        
+        
         
         self.questionTitleLabel.text = data.singleton.apiResponseQuestion[0]
         
@@ -273,11 +286,36 @@ class QAscreen: UIViewController {
         
     }
     
+    func skipQuestion() {
+        
+        print(count)
+        
+        if (count < questions.count){
+            
+            count = count + 1
+            
+            if(count == questions.count){
+                self.recordedAnswer.append("Not Answered")
+                print(" m here")
+                self.calculatingResults()
+                self.show(ResultViewController(), sender: self)
+            }else{
+                questionLabel.text = "\(questions[count])"
+                countLabel.text = "\(count+1)/\(questions.count)"
+                self.recordedAnswer.append("Not Answered")
+                print(recordedAnswer)
+            }
+            
+        }
+        
+    }
+    
+    
     func calculatingResults() {
         
         for i in 0..<answers.count {
             
-            if answers[i] == recordedAnswer[i]{
+            if (answers[i].caseInsensitiveCompare(recordedAnswer[i]) == .orderedSame){
                 
                 print("answer matches: \(recordedAnswer[i])")
                 
@@ -285,6 +323,15 @@ class QAscreen: UIViewController {
                 correctIncorrectList.append("Correct")
                 correctAnswers = correctAnswers + 1
             }else{
+                
+//            if answers[i] == recordedAnswer[i]{
+//
+//                print("answer matches: \(recordedAnswer[i])")
+//
+//                correctAnsList.append(answers[i])
+//                correctIncorrectList.append("Correct")
+//                correctAnswers = correctAnswers + 1
+//            }else{
                 wrongAnsList.append(recordedAnswer[i])
                 correctIncorrectList.append(recordedAnswer[i])
 //                correctIncorrectList.append([recordedAnswer[index] + " - " + " Correct: " + answers[index]])
@@ -302,7 +349,7 @@ class QAscreen: UIViewController {
     
     @objc func skipHandler(){
         
-        nextQuestion()
+        skipQuestion()
         
     }
     
@@ -313,19 +360,18 @@ class QAscreen: UIViewController {
         
         if audioEngine.isRunning {
             
-            // move to finish screen
-            //            calculatingResults()
-            //            self.show(ResultViewController(), sender: self)
-            
-            audioEngine.stop()
-            recognitionRequest?.endAudio()
-            micImageViewButton.isEnabled = false
-            self.recordedAnswer.append(self.recordedData)
-            recordLabel.text = "Start Recording"
-            print("answers: \(self.recordedAnswer)")
-            self.nextQuestion()
-            
-            
+            if(self.recordedData == ""){
+                ToastView.shared.long(view, txt_msg: "Please Record Again")
+            }else{
+                audioEngine.stop()
+                recognitionRequest?.endAudio()
+                micImageViewButton.isEnabled = false
+                self.recordedAnswer.append(self.recordedData)
+                recordLabel.text = "Start Recording"
+                print("answers: \(self.recordedAnswer)")
+                
+                self.nextQuestion()
+            }
             
         } else {
             startRecording()
@@ -435,6 +481,10 @@ class QAscreen: UIViewController {
     
     func startRecording() {
         
+        
+        self.recordedData = ""
+        print("this is recorded data: \(self.recordedData)")
+        
         if recognitionTask != nil {
             recognitionTask?.cancel()
             recognitionTask = nil
@@ -466,7 +516,9 @@ class QAscreen: UIViewController {
             
             if result != nil {
                 
-                self.recordedData = (result?.bestTranscription.formattedString)!
+                var data: String? = (result?.bestTranscription.formattedString)!
+                self.recordedData = data!
+                data = nil
                 
                 print("recorded data: \(self.recordedData)")
                 print("isFinal = \(isFinal)")

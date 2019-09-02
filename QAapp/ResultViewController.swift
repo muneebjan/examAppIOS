@@ -45,16 +45,6 @@ class ResultViewController: UIViewController {
         return label
     }()
     
-    let bestScoreLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont(name: "Roboto-Light", size: 22)
-        label.text = "Best Score 20"
-        label.textAlignment = .center
-        label.textColor = .white
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
     let lineView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
@@ -85,9 +75,12 @@ class ResultViewController: UIViewController {
     
     @objc func retryButtonHandler(){
         print("retry Pressed")
-//        let preferences = UserDefaults.standard
-//        preferences.set(true, forKey: "retryCheck")
-        self.present(QAscreen(), animated: true, completion: nil)
+        
+        data.singleton.correctIncorrectAnswers.removeAll()
+        data.singleton.questionAnswerMergeArray.removeAll()
+        self.show(QAscreen(), sender: self)
+//        self.show(ScanImageAndShowQA(), sender: self)
+        
     }
     
     @objc func nextButtonHandler(){
@@ -145,7 +138,6 @@ class ResultViewController: UIViewController {
         view.addSubview(containerView)
         containerView.addSubview(resultImageView)
         containerView.addSubview(scoreLabel)
-        containerView.addSubview(bestScoreLabel)
         containerView.addSubview(lineView)
         containerView.addSubview(retryButton)
         containerView.addSubview(nextButton)
@@ -170,10 +162,8 @@ class ResultViewController: UIViewController {
         scoreLabel.topAnchor.constraint(equalTo: resultImageView.bottomAnchor, constant: 15).isActive = true
         scoreLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
         
-        bestScoreLabel.topAnchor.constraint(equalTo: scoreLabel.bottomAnchor, constant: 15).isActive = true
-        bestScoreLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
         
-        lineView.topAnchor.constraint(equalTo: bestScoreLabel.bottomAnchor, constant: 20).isActive = true
+        lineView.topAnchor.constraint(equalTo: scoreLabel.bottomAnchor, constant: 20).isActive = true
         lineView.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.85).isActive = true
         lineView.heightAnchor.constraint(equalToConstant: 1).isActive = true
         lineView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
